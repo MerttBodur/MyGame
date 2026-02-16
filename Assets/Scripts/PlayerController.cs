@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -54,7 +55,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Debug.Log(coin.ToString());
-
+        
     }
 
     private void Flip()
@@ -64,4 +65,15 @@ public class PlayerController : MonoBehaviour
         scaler.x *= -1f;
         visual.localScale = scaler;
     }
-}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Spike")
+        {
+            Debug.Log("Made contact with the spike.");
+
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    }
