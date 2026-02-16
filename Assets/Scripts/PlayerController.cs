@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour
 
     bool facingRight;
 
+    bool isJumping;
+    bool isGrounded;
+    public Transform groundCheck;
+    public LayerMask groundLayer;
+
+    public float groundCheckRadius = 0.01f;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -32,6 +38,22 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
+        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, 0.15f, groundLayer);
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+
+        if (isGrounded && isJumping)
+        {
+            isJumping = false;
+        }
+
+        Debug.Log("Grounded: " + isGrounded);
+        if (Input.GetKeyDown(KeyCode.Space)) Debug.Log("Space pressed");
+
     }
 
     private void Flip()
