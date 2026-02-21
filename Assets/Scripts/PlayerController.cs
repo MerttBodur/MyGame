@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     Animator anim;
 
     public float groundCheckRadius = 0.1f;
-
+    public float coyoteTime = 0.1f;
+    float coyoteTimeCounter;
     public int coin = 0;
     void Start()
     {
@@ -33,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float moveInput = Input.GetAxis("Horizontal"); //right 1, left -1
+        float moveInput = Input.GetAxisRaw("Horizontal"); //right 1, left -1
         rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
         if (moveInput > 0 && !facingRight)
@@ -47,14 +48,20 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, 0.15f, groundLayer);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Coyote time sayacý
+        if (isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            coyoteTimeCounter = coyoteTime;     // yerdeyken her frame resetleniyor
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime; // havadayken geri sayýyor
         }
 
-        if (isGrounded && isJumping)
+        if (Input.GetKey(KeyCode.Space) && coyoteTimeCounter > 0f)
         {
-            isJumping = false;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            coyoteTimeCounter = 0f;   // ayný coyote süresi içinde tekrar tekrar zýplamasýn
         }
 
         Debug.Log(coin.ToString());
