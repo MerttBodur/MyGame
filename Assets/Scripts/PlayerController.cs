@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundLayer;
 
-    public float groundCheckRadius = 0.01f;
+    public float groundCheckRadius = 0.1f;
 
     public int coin = 0;
     void Start()
@@ -74,6 +74,14 @@ public class PlayerController : MonoBehaviour
 
             SceneManager.LoadScene(0);
         }
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Made contact with the enemy!");
+
+            SceneManager.LoadScene(0);
+        }
     }
+
+  
 
     }
